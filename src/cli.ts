@@ -1,13 +1,9 @@
 import 'colors';
 import commander from 'commander';
-import { deleteTmpDirSync, unzipToTmpDir, downloadFromUrlToTmpDir } from './fs';
+import { deleteTmpDirSync as cleanup, unzipToTmpDir, downloadFromUrlToTmpDir } from './fs';
 import packageInfo from '../package.json';
 import connectifApi, { ExportRequest } from './connectif-api';
 import googleCloudStorage from './gc-storage';
-
-function cleanup(): void {
-    deleteTmpDirSync();
-}
 
 type ExportOptions = {
     connectifApiKey: string;
@@ -15,7 +11,7 @@ type ExportOptions = {
     gcBucketName: string;
 };
 
-async function exportCommand(options: ExportOptions, exportRequest: ExportRequest): Promise<void> {
+async function executeExport(options: ExportOptions, exportRequest: ExportRequest): Promise<void> {
     try {
         const {
             createExport: createConnectifExport,
@@ -59,7 +55,7 @@ async function exportContacts(cmdObj): Promise<void> {
         }
     };
     const options = getExportOptionsFromCmdObj(cmdObj);
-    await exportCommand(options, exportRequest);
+    await executeExport(options, exportRequest);
 }
 
 async function exportActivities(cmdObj): Promise<void> {
@@ -75,7 +71,7 @@ async function exportActivities(cmdObj): Promise<void> {
         }
     };
     const options = getExportOptionsFromCmdObj(cmdObj);
-    await exportCommand(options, exportRequest);
+    await executeExport(options, exportRequest);
 }
 
 export default function cli(): commander.Command {
