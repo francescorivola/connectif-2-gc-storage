@@ -81,6 +81,7 @@ export default function cli(): commander.Command {
         .version(packageInfo.version)
         .name(packageInfo.name)
         .description(packageInfo.description)
+
     program
         .command('export-activities')
         .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
