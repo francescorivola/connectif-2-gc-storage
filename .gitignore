@@ -1,0 +1,5 @@
+node_modules
+build
+tmp
+key.json
+coverage
