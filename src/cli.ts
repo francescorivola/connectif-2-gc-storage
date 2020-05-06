@@ -40,7 +40,7 @@ async function exportCommand(options: ExportOptions, exportRequest: ExportReques
 }
 
 function getExportOptionsFromCmdObj(cmdObj): ExportOptions {
-    const { connectifApiKey, gcKeyFileName, gcBucketName } = cmdObj.parent;
+    const { connectifApiKey, gcKeyFileName, gcBucketName } = cmdObj;
     return {
         connectifApiKey,
         gcBucketName,
@@ -85,12 +85,11 @@ export default function cli(): commander.Command {
         .version(packageInfo.version)
         .name(packageInfo.name)
         .description(packageInfo.description)
-        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
-        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name.')
-        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required.');
-
     program
         .command('export-activities')
+        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
+        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name.')
+        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required.')
         .requiredOption('-f, --dateFrom <dateFrom>', 'filter activities export created after a given date.')
         .requiredOption('-t, --dateTo <dateTo>', 'filter activities export created before a given date.')
         .option('-s, --segmentId <segmentId>', 'filter the activities export of contacts in a given segment.')
@@ -99,6 +98,9 @@ export default function cli(): commander.Command {
 
     program
         .command('export-contacts')
+        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
+        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name.')
+        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required.')
         .option('-s, --segmentId <segmentId>', 'filter the export by contacts in a given segment.')
         .description('export contacts.')
         .action(exportContacts);
