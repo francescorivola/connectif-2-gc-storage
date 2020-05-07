@@ -59,6 +59,52 @@ describe('cli', () => {
         }
     });
 
+    it('should throw an error if create request is invalid', async () => {
+        expect.assertions(2);
+        const apiKey = shortid.generate();
+        const scope = nock('https://api.connectif.cloud', {
+                reqheaders: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `apiKey ${apiKey}`
+                }
+            })
+            .post('/exports', {
+                exportType: 'contacts',
+                delimiter: ',',
+                dateFormat: 'ISO',
+                filters: {
+                    segmentId: 'segmentId'
+                }
+            })
+            .reply(422, {
+                    detail: 'One or more validation error occurred.',
+                    status: 422,
+                    title: 'Unprocessable entity',
+                    validationErrors: [
+                        {
+                            name: 'segmentId',
+                            path: '/filters/segmentId',
+                            reason: 'Value is not valid'
+                        }
+                    ]
+                });
+
+        try {
+            await cli().parseAsync([
+                'node',
+                'index.js',
+                'export-contacts',
+                '-a', apiKey,
+                '-k', './key.json',
+                '-b', 'bucketName',
+                '-s', 'segmentId'
+            ]);
+        } catch(error) {
+            expect(error.message).toBe('Error response while creating export: Unprocessable Entity - One or more validation error occurred.\n/filters/segmentId: Value is not valid');
+            expect(scope.isDone()).toBe(true);
+        }
+    });
+
     it('should throw an error if get export result fail', async () => {
         expect.assertions(3);
         const apiKey = shortid.generate();

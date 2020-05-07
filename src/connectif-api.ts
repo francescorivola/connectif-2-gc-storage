@@ -25,8 +25,11 @@ export default function connectifApi(apiKey: string): ConnectifApi {
 
     async function getErrorFromResponse(response): Promise<string> {
         const statusText = response.statusText;
-        const detail = response.headers.get('content-type') === 'application/json' ? ' - ' + (await response.json()).detail : '';
-        return statusText + detail;
+        if (response.headers.get('content-type') !== 'application/json') {
+            return statusText;
+        }
+        const { detail, validationErrors } = await response.json();
+        return `${statusText} - ${detail}${(validationErrors ?? []).map(v => `\n${v.path}: ${v.reason}`).join()}`;
     }
 
     async function createExport(exportRequest: ExportRequest): Promise<string> {
