@@ -23,7 +23,7 @@ export type ExportRequest = {
 
 export default function connectifApi(apiKey: string): ConnectifApi {
 
-    async function getErrorFromResponse(response): Promise<string> {
+    async function getErrorMessageFromResponse(response): Promise<string> {
         const statusText = response.statusText;
         if (response.headers.get('Content-Type') !== 'application/json') {
             return statusText;
@@ -42,7 +42,7 @@ export default function connectifApi(apiKey: string): ConnectifApi {
             }
         });
         if (!response.ok) {
-            throw new Error(`Error response while creating export: ${await getErrorFromResponse(response)}`)
+            throw new Error(`Error response while creating export: ${await getErrorMessageFromResponse(response)}`)
         }
         const { id } = await response.json();
         return id;
@@ -55,7 +55,7 @@ export default function connectifApi(apiKey: string): ConnectifApi {
             }
         });
         if (!response.ok) {
-            throw new Error(`Error response while checking progress export: ${await getErrorFromResponse(response)}`)
+            throw new Error(`Error response while checking progress export: ${await getErrorMessageFromResponse(response)}`)
         }
         const { status, fileUrl, total, progress } = await response.json();
 
