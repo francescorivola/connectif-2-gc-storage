@@ -84,20 +84,20 @@ export default function cli(): commander.Command {
 
     program
         .command('export-activities')
-        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
-        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name.')
-        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required.')
-        .requiredOption('-f, --fromDate <fromDate>', 'filter activities export created after a given date.')
-        .requiredOption('-t, --toDate <toDate>', 'filter activities export created before a given date.')
+        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
+        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
+        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
+        .requiredOption('-f, --fromDate <fromDate>', 'filter activities export created after a given date (required).')
+        .requiredOption('-t, --toDate <toDate>', 'filter activities export created before a given date (required).')
         .option('-s, --segmentId <segmentId>', 'filter the activities export of contacts in a given segment.')
         .description('export contacts activities.')
         .action(exportActivities);
 
     program
         .command('export-contacts')
-        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
-        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name.')
-        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required.')
+        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
+        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
+        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
         .option('-s, --segmentId <segmentId>', 'filter the export by contacts in a given segment.')
         .description('export contacts.')
         .action(exportContacts);
