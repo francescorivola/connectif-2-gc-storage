@@ -56,18 +56,19 @@ export default function connectifApi(apiKey: string): ConnectifApi {
         }
         const { status, fileUrl, total, progress } = await response.json();
 
-        if (!progressBar) {
+        if (!progressBar && total > 0) {
             progressBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
             progressBar.start(total, 0);
         }
-        progressBar.update(progress);
+        progressBar?.setTotal(total);
+        progressBar?.update(progress);
 
         if (status === 'finished') {
-            progressBar.stop();
+            progressBar?.stop();
             return fileUrl;
         }
         if (status === 'error') {
-            progressBar.stop();
+            progressBar?.stop();
             throw new Error('Export has finished with error status');
         }
         await wait(1000);

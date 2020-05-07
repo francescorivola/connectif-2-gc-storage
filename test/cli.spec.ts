@@ -182,10 +182,27 @@ describe('cli', () => {
                 }
             })
             .get(`/exports/${exportId}`)
+            .once()
+            .reply(200, {
+                status: 'inProgress',
+                total: 0,
+                progress: 0,
+                fileUrl: 'https://export.com/myexportfile.zip'
+            })
+            .get(`/exports/${exportId}`)
+            .once()
+            .reply(200, {
+                status: 'inProgress',
+                total: 1000,
+                progress: 500,
+                fileUrl: 'https://export.com/myexportfile.zip'
+            })
+            .get(`/exports/${exportId}`)
+            .once()
             .reply(200, {
                 status: 'finished',
-                total: 100,
-                progress: 100,
+                total: 1000,
+                progress: 1000,
                 fileUrl: 'https://export.com/myexportfile.zip'
             });
 

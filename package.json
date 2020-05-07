@@ -32,6 +32,7 @@
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
+    "@types/cli-progress": "^3.7.0",
     "@types/jest": "^25.1.0",
     "@types/node": "^13.13.5",
     "@types/node-fetch": "^2.5.7",
