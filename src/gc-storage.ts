@@ -9,13 +9,14 @@ export type GoogleCloudStorage = {
     uploadFiles(files: { fileName: string; path: string }[]): Promise<void>;
 }
 
+const uuidRegExp = new RegExp('-[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}');
+
 export default function googleCloudStorage(options: GoogleCloudStorageOptions): GoogleCloudStorage {
     const storage = new Storage({ keyFilename: options.gcKeyFileName });
 
     function getDestinationFromFileName(fileName: string): string {
-        const [ fileNameWithoutExtension ] = fileName.split('.');
-        const fileParts = fileNameWithoutExtension.split('-');
-        return fileParts.slice(0, fileParts.length - 5).join('-');
+        const [ fileNamePart ] = fileName.split('.');
+        return `${fileNamePart.replace(uuidRegExp, '')}/${fileName}`;
     }
 
     async function uploadFile(fileName: string, filePath: string): Promise<void> {

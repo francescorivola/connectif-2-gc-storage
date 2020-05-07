@@ -289,7 +289,7 @@ describe('cli', () => {
         expect(scopeGet.isDone()).toBe(true);
         expect(scopeDownload.isDone()).toBe(true);
         expect(bucketMock).toHaveBeenNthCalledWith(2, 'bucketName');
-        expect(uploadMock).toHaveBeenCalledWith(getTmpDirFilePathSync('export-activities-18615f52-43dd-4448-85ed-9107273303cc.csv'), { destination: 'export-activities'});
-        expect(uploadMock).toHaveBeenCalledWith(getTmpDirFilePathSync('export-activities-extra-18615f52-43dd-4448-85ed-9107273303cc.csv'), { destination: 'export-activities-extra'});
+        expect(uploadMock).toHaveBeenCalledWith(getTmpDirFilePathSync('export-activities-18615f52-43dd-4448-85ed-9107273303cc.csv'), { destination: 'export-activities/export-activities-18615f52-43dd-4448-85ed-9107273303cc.csv'});
+        expect(uploadMock).toHaveBeenCalledWith(getTmpDirFilePathSync('export-activities-18615f52-43dd-4448-85ed-9107273303cc-products.csv'), { destination: 'export-activities-products/export-activities-18615f52-43dd-4448-85ed-9107273303cc-products.csv'});
     });
 });
