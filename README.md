@@ -2,6 +2,8 @@
 
 # connectif-2-gc-storage
 
+
+[![Npm Version](https://badge.fury.io/js/connectif-2-gc-storage.svg)](https://www.npmjs.com/package/connectif-2-gc-storage)
 [![Actions Status](https://github.com/francescorivola/connectif-2-gc-storage/workflows/Node%20CI/badge.svg)](https://github.com/francescorivola/connectif-2-gc-storage/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage/badge)](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage)
 [![codecov](https://codecov.io/gh/francescorivola/connectif-2-gc-storage/branch/master/graph/badge.svg)](https://codecov.io/gh/francescorivola/connectif-2-gc-storage)
@@ -28,7 +30,7 @@ Before run the CLI we must ensure we have all the credentials in place in order 
 
 ## Usage
 
-The usage documentation can be found running the tool with the help flag:
+The usage documentation can be found running the CLI with the help flag:
 
 ```
 $ connectif-2-gc-storage --help
@@ -51,10 +53,10 @@ Commands:
   help [command]               display help for command
 ```
 
-Help flag can also be used to get documentation of each command. i.e.:
+To get documentation of each command use help. i.e.:
 
 ```
-$ connectif-2-gc-storage export-activities --help
+$ connectif-2-gc-storage help export-activities
 ```
 
 Output:
