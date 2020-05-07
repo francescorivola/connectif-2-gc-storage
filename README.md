@@ -1,3 +1,5 @@
+![connectif-2-gc-storage](./doc/images/connectif-2-gc-storage-logo.png)
+
 # connectif-2-gc-storage
 
 [![Actions Status](https://github.com/francescorivola/connectif-2-gc-storage/workflows/Node%20CI/badge.svg)](https://github.com/francescorivola/connectif-2-gc-storage/actions)
