@@ -74,8 +74,8 @@ describe('cli', () => {
                 delimiter: ',',
                 dateFormat: 'ISO',
                 filters: {
-                    dateFrom: '2020-05-01',
-                    dateTo: '2020-05-02'
+                    fromDate: '2020-05-01',
+                    toDate: '2020-05-02'
                 }
             })
             .reply(201, { id: exportId });
@@ -122,8 +122,8 @@ describe('cli', () => {
                 delimiter: ',',
                 dateFormat: 'ISO',
                 filters: {
-                    dateFrom: '2020-05-01',
-                    dateTo: '2020-05-02'
+                    fromDate: '2020-05-01',
+                    toDate: '2020-05-02'
                 }
             })
             .reply(201, { id: exportId });
@@ -170,8 +170,8 @@ describe('cli', () => {
                 delimiter: ',',
                 dateFormat: 'ISO',
                 filters: {
-                    dateFrom: '2020-05-01',
-                    dateTo: '2020-05-02'
+                    fromDate: '2020-05-01',
+                    toDate: '2020-05-02'
                 }
             })
             .reply(201, { id: exportId });
@@ -226,8 +226,8 @@ describe('cli', () => {
                 delimiter: ',',
                 dateFormat: 'ISO',
                 filters: {
-                    dateFrom: '2020-05-01',
-                    dateTo: '2020-05-02',
+                    fromDate: '2020-05-01',
+                    toDate: '2020-05-02',
                     segmentId: 'segmentId'
                 }
             })

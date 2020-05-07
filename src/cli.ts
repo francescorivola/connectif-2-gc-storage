@@ -59,14 +59,14 @@ async function exportContacts(cmdObj): Promise<void> {
 }
 
 async function exportActivities(cmdObj): Promise<void> {
-    const { dateTo, dateFrom, segmentId } = cmdObj;
+    const { toDate, fromDate, segmentId } = cmdObj;
     const exportRequest: ExportRequest = {
         exportType: 'activities',
         delimiter: ',',
         dateFormat: 'ISO',
         filters: {
-            dateTo,
-            dateFrom,
+            toDate,
+            fromDate,
             segmentId
         }
     };
@@ -87,8 +87,8 @@ export default function cli(): commander.Command {
         .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file.')
         .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name.')
         .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required.')
-        .requiredOption('-f, --dateFrom <dateFrom>', 'filter activities export created after a given date.')
-        .requiredOption('-t, --dateTo <dateTo>', 'filter activities export created before a given date.')
+        .requiredOption('-f, --fromDate <fromDate>', 'filter activities export created after a given date.')
+        .requiredOption('-t, --toDate <toDate>', 'filter activities export created before a given date.')
         .option('-s, --segmentId <segmentId>', 'filter the activities export of contacts in a given segment.')
         .description('export contacts activities.')
         .action(exportActivities);

@@ -16,8 +16,8 @@ export type ExportRequest = {
     dateFormat: string;
     filters: {
         segmentId?: string;
-        dateTo?: string;
-        dateFrom?: string;
+        toDate?: string;
+        fromDate?: string;
     };
 }
 
