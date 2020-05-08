@@ -25,7 +25,8 @@ export default function connectifApi(apiKey: string): ConnectifApi {
 
     async function getErrorMessageFromResponse(response): Promise<string> {
         const statusText = response.statusText;
-        if (response.headers.get('Content-Type') !== 'application/json') {
+        const contentType = response.headers.get('Content-Type');
+        if (!contentType || !contentType.includes('application/json')) {
             return statusText;
         }
         const { detail, validationErrors } = await response.json();
