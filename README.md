@@ -82,21 +82,26 @@ An use case for this tool is to automate data analysis with [Google Data Studio]
 
 ### First Export/Import
 
-We run a first time the CLI to export Connectif contacts activities of March
+We run a first time the CLI to export Connectif contacts activities of March.
 
 ```
-$ connectif-2-gc-storage export-activities --gcKeyFileName ./key.json --gcBucketName $YOUR_BUCKET_NAME --connectifApiKey $CONNECTIF_API_KEY --fromDate 2020-03-01 --toDate 2020-04-01
+$ connectif-2-gc-storage export-activities \
+  --gcKeyFileName ./key.json \
+  --gcBucketName $BUCKET_NAME \
+  --connectifApiKey $CONNECTIF_API_KEY \
+  --fromDate 2020-03-01 \
+  --toDate 2020-04-01
 ```
 
 ![cli-run](./doc/images/cli-run.png)
 
-Once done, we can check the result and we can see we have a csv file result under a folder export-activities in our bucket
+Once done, we can check the result and we can see we have a csv file result under a folder **export-activities** in our bucket.
 
 ![gc-storage-export-result](./doc/images/gc-storage-export-result.png)
 
 ### Connect GCS to Google Data Studio
 
-First of all we add a new Google Cloud Storage **Data Source**
+First of all we add a new Google Cloud Storage **Data Source**.
 
 ![data-studio-add-connector](./doc/images/data-studio-add-connector.png)
 
@@ -104,28 +109,33 @@ Then we configure the connector checking the checkbox **Use all files in path** 
 
 ![data-studio-gc-storage-connector](./doc/images/data-studio-gc-storage-connector.png)
 
-We configure our fields (for this example we just take the fields as are)
+We configure our fields (for this example we just take the fields as come from the csv).
 
 ![data-studio-fields](./doc/images/data-studio-fields.png)
 
-We start creating reports :)
+We start creating reports :).
 
 ![data-studio-report](./doc/images/data-studio-report.png)
 
 ### Second Export/Import
 
-Now that we have configured our Google Cloud Storage with Google Data Studio and we have created our report/s we can run the CLI to add more data, for instance, the month of April
+Now that we have configured our Google Cloud Storage with Google Data Studio and we have created our report/s we can run the CLI to add more data. This time let's export contacts activities of April.
 
 ```
-$ connectif-2-gc-storage export-activities --gcKeyFileName ./key.json --gcBucketName $YOUR_BUCKET_NAME --connectifApiKey $CONNECTIF_API_KEY --fromDate 2020-04-01 --toDate 2020-05-01
+$ connectif-2-gc-storage export-activities \
+  --gcKeyFileName ./key.json \
+  --gcBucketName $BUCKET_NAME \
+  --connectifApiKey $CONNECTIF_API_KEY \
+  --fromDate 2020-04-01 \
+  --toDate 2020-05-01
 ```
 ![cli-run-2](./doc/images/cli-run-2.png)
 
-If we check the Google Cloud Storage Browser we will see 2 csv files, the previous one and the new one imported
+If we check the Google Cloud Storage Browser we will see 2 csv files under our export-activities folder, the previous one and the new one imported.
 
 ![gc-storage-export-result-2](./doc/images/gc-storage-export-result-2.png)
 
-Now, let's go back to our report, click in the **Refresh** button and the report will update adding the April month :)
+Now, let's go back to our report in Google Data Studio, click in the **Refresh** button and the report will automatically update adding the April month data :).
 
 ![data-studio-report-2](./doc/images/data-studio-report-2.png)
 
