@@ -76,6 +76,20 @@ Options:
   -h, --help                      display help for command
 ```
 
+## Docker
+
+In case you want to run the CLI via docker you can use the following docker image:
+
+The following will print the version of the CLI:
+```
+docker run --rm connectif-2-gc-storage:latest
+```
+
+The following will run the CLI with the given options:
+```
+docker run --rm -v key.json:/usr/src/cli connectif-2-gc-storage:latest export-activities --gcKeyFileName=./key.json --gcBucketName=$BUCKET_NAME --connectifApiKey=$CONNECTIF_API_KEY --fromDate=$FROM_DATE --toDate=$TO_DATE
+```
+
 ## Use Case
 
 An use case for this tool is to automate data analysis with [Google Data Studio](https://datastudio.google.com/). Once the csv files are exported in Google Cloud Storage we can use it to feed Google Data Studio through its Google Cloud Storage Connector.
