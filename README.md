@@ -8,6 +8,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage/badge)](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage)
 [![codecov](https://codecov.io/gh/francescorivola/connectif-2-gc-storage/branch/master/graph/badge.svg)](https://codecov.io/gh/francescorivola/connectif-2-gc-storage)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=francescorivola/connectif-2-gc-storage)](https://dependabot.com)
+[![Docker Pulls](https://img.shields.io/docker/pulls/francescorivola/connectif-2-gc-storage.svg)](https://hub.docker.com/r/francescorivola/connectif-2-gc-storage)
 
 A CLI that makes extremely easy automate export data from the [Connectif Marketing Automation Platform](https://www.connectif.ai) and upload it to [Google Cloud Storage](https://cloud.google.com/storage).
 
@@ -78,16 +79,22 @@ Options:
 
 ## Docker
 
-In case you want to run the CLI via docker you can use the following docker image:
+In case you want to run the CLI using docker you can with the following commands:
 
-The following will print the version of the CLI:
+The below will print the version of the CLI:
 ```
 docker run --rm francescorivola/connectif-2-gc-storage:latest
 ```
 
-The following will run the CLI with the given options:
+The below will run the CLI with the given options:
 ```
-docker run --rm -v key.json:/usr/src/cli francescorivola/connectif-2-gc-storage:latest export-activities --gcKeyFileName=./key.json --gcBucketName=$BUCKET_NAME --connectifApiKey=$CONNECTIF_API_KEY --fromDate=$FROM_DATE --toDate=$TO_DATE
+docker run --rm -v key.json:/usr/src/cli francescorivola/connectif-2-gc-storage:latest \
+  export-activities \
+  --gcKeyFileName=./key.json \
+  --gcBucketName=$BUCKET_NAME \
+  --connectifApiKey=$CONNECTIF_API_KEY \
+  --fromDate=$FROM_DATE \
+  --toDate=$TO_DATE
 ```
 
 ## Use Case
