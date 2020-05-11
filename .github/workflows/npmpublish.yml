@@ -43,6 +43,7 @@ jobs:
     needs: publish-npm
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Get NPM Version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
