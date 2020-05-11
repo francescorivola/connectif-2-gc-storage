@@ -54,6 +54,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: francescorivola/connectif-2-gc-storage
           build_args: NODE_IMAGE_TAG=14.2-alpine,CLI_VERSION=${{ steps.package-version.outputs.current-version}}
-          tag_with_ref: true
           tag_with_sha: true
-          tags: ${{ steps.package-version.outputs.current-version}}
+          tags: ${{ steps.package-version.outputs.current-version}},latest

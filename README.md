@@ -82,12 +82,12 @@ In case you want to run the CLI via docker you can use the following docker imag
 
 The following will print the version of the CLI:
 ```
-docker run --rm connectif-2-gc-storage:latest
+docker run --rm francescorivola/connectif-2-gc-storage:latest
 ```
 
 The following will run the CLI with the given options:
 ```
-docker run --rm -v key.json:/usr/src/cli connectif-2-gc-storage:latest export-activities --gcKeyFileName=./key.json --gcBucketName=$BUCKET_NAME --connectifApiKey=$CONNECTIF_API_KEY --fromDate=$FROM_DATE --toDate=$TO_DATE
+docker run --rm -v key.json:/usr/src/cli francescorivola/connectif-2-gc-storage:latest export-activities --gcKeyFileName=./key.json --gcBucketName=$BUCKET_NAME --connectifApiKey=$CONNECTIF_API_KEY --fromDate=$FROM_DATE --toDate=$TO_DATE
 ```
 
 ## Use Case
