@@ -10,3 +10,4 @@ jest.config.js
 .eslintignore
 .eslintrc
 README.md
+Dockerfile
