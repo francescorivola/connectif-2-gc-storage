@@ -38,3 +38,21 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  publish-docker-hub:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get NPM Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - name: Docker Build and Publish
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: francescorivola/connectif-2-gc-storage
+          build_args: NODE_IMAGE_TAG=14.2-alpine,CLI_VERSION=${{ steps.package-version.outputs.current-version}}
+          tag_with_ref: true
+          tag_with_sha: true
+          tags: ${{ steps.package-version.outputs.current-version}}
