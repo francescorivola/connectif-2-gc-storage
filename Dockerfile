@@ -3,11 +3,12 @@ ARG CLI_VERSION
 
 FROM node:${NODE_IMAGE_TAG}
 
-WORKDIR /usr/src/cli
+USER node
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+ENV PATH=$PATH:/home/node/.npm-global/bin
+WORKDIR /home/node
 
 RUN npm i -g connectif-2-gc-storage@${CLI_VERSION}
-
-USER node
 
 ENTRYPOINT [ "connectif-2-gc-storage" ]
 
