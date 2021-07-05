@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/cli-progress": "^3.7.0",
     "@types/jest": "^26.0.0",
-    "@types/node": "^15.0.0",
+    "@types/node": "^16.0.0",
     "@types/node-fetch": "^2.5.7",
     "@types/shortid": "0.0.29",
     "@types/unzipper": "^0.10.3",
