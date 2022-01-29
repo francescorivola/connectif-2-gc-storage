@@ -28,7 +28,7 @@
     "colors": "^1.4.0",
     "commander": "^8.0.0",
     "node-fetch": "^2.6.0",
-    "shortid": "^2.2.15",
+    "shortid": "^2.2.8",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
