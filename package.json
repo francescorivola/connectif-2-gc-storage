@@ -38,13 +38,14 @@
     "@types/node-fetch": "^3.0.3",
     "@types/shortid": "0.0.29",
     "@types/unzipper": "^0.10.3",
-    "@typescript-eslint/eslint-plugin": "^2.31.0",
-    "@typescript-eslint/parser": "^2.31.0",
-    "eslint": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.8.0",
     "jest": "^25.5.4",
     "nock": "^13.0.0",
     "ts-jest": "^25.5.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "typescript-eslint": "^0.0.1-alpha.0"
   },
   "bin": {
     "connectif-2-gc-storage": "./build/src/index.js"
