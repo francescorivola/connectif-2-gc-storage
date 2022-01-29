@@ -88,7 +88,7 @@ docker run --rm francescorivola/connectif-2-gc-storage:latest
 
 The below will run the CLI with the given options:
 ```
-docker run --rm -v key.json:/home/node/key.json francescorivola/connectif-2-gc-storage:latest \
+docker run --rm -v $(pwd)/key.json:/home/node/key.json francescorivola/connectif-2-gc-storage:latest \
   export-activities \
   --gcKeyFileName=./key.json \
   --gcBucketName=$BUCKET_NAME \
