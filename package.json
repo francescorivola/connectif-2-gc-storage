@@ -1,6 +1,6 @@
 {
   "name": "connectif-2-gc-storage",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "CLI to automate Connectif data export uploading to Google Cloud Storage",
   "main": "build/src/index.js",
   "scripts": {
