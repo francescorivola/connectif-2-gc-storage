@@ -7,7 +7,7 @@
 [![Actions Status](https://github.com/francescorivola/connectif-2-gc-storage/workflows/Node%20CI/badge.svg)](https://github.com/francescorivola/connectif-2-gc-storage/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage/badge)](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage)
 [![codecov](https://codecov.io/gh/francescorivola/connectif-2-gc-storage/branch/master/graph/badge.svg)](https://codecov.io/gh/francescorivola/connectif-2-gc-storage)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=francescorivola/connectif-2-gc-storage)](https://dependabot.com)
+[![Dependabot](https://badgen.net/badge/Dependabot/enabled/green?icon=dependabot)](https://dependabot.com/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/francescorivola/connectif-2-gc-storage.svg)](https://hub.docker.com/r/francescorivola/connectif-2-gc-storage)
 
 A CLI that makes extremely easy automate export data from the [Connectif Marketing Automation Platform](https://www.connectif.ai) and upload it to [Google Cloud Storage](https://cloud.google.com/storage).
