@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 18
       - run: npm ci
       - run: npm run build
       - run: npm run lint
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 18
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm run build
@@ -53,6 +53,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: francescorivola/connectif-2-gc-storage
-          build_args: NODE_IMAGE_TAG=14.2-alpine,CLI_VERSION=${{ steps.package-version.outputs.current-version}}
+          build_args: NODE_IMAGE_TAG=16.14.2-alpine,CLI_VERSION=${{ steps.package-version.outputs.current-version}}
           tag_with_sha: true
           tags: ${{ steps.package-version.outputs.current-version}},latest
