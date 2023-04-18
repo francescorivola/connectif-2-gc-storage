@@ -11,7 +11,7 @@ const bucketMock = jest.fn(() => ({
 }));
 
 describe("cli", () => {
-  const apiKey = "7wR6hGjym5ZkcEL8iEz4CW:6qBfXMcGiIRWoa7olZ3ycd";
+  const apiKey = "7wR6hGjym5ZkcEL8iEz4CW:6qBfXMcGiIRWoa7olZ3ycd"; // this is a fake apiKey
 
   beforeEach(() => {
     (Storage as unknown as jest.Mock).mockImplementation(() => ({
