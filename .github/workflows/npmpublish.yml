@@ -53,6 +53,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: francescorivola/connectif-2-gc-storage
-          build_args: NODE_IMAGE_TAG=16.14.2-alpine,CLI_VERSION=${{ steps.package-version.outputs.current-version}}
+          build_args: NODE_IMAGE_TAG=18.16.0-alpine,CLI_VERSION=${{ steps.package-version.outputs.current-version}}
           tag_with_sha: true
           tags: ${{ steps.package-version.outputs.current-version}},latest
