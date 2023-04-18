@@ -1,6 +1,5 @@
 import cli from "../src/cli";
 import nock from "nock";
-import shortid from "shortid";
 import { Storage } from "@google-cloud/storage";
 import { getTmpDirFilePathSync } from "../src/fs";
 
@@ -8,13 +7,15 @@ jest.mock("@google-cloud/storage");
 
 const uploadMock = jest.fn(() => Promise.resolve());
 const bucketMock = jest.fn(() => ({
-  upload: uploadMock
+  upload: uploadMock,
 }));
 
 describe("cli", () => {
+  const apiKey = "7wR6hGjym5ZkcEL8iEz4CW:6qBfXMcGiIRWoa7olZ3ycd";
+
   beforeEach(() => {
-    ((Storage as unknown) as jest.Mock).mockImplementation(() => ({
-      bucket: bucketMock
+    (Storage as unknown as jest.Mock).mockImplementation(() => ({
+      bucket: bucketMock,
     }));
   });
 
@@ -25,20 +26,19 @@ describe("cli", () => {
 
   it("should throw an error if apiKey is unauthorized", async () => {
     expect.assertions(2);
-    const apiKey = shortid.generate();
     const scope = nock("https://api.connectif.cloud", {
       reqheaders: {
         "Content-Type": "application/json",
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .post("/exports", {
         exportType: "contacts",
         delimiter: ",",
         dateFormat: "ISO",
         filters: {
-          segmentId: "segmentId"
-        }
+          segmentId: "643e76bfc1d60cb6ca7832fb",
+        },
       })
       .reply(401);
 
@@ -54,7 +54,7 @@ describe("cli", () => {
         "-b",
         "bucketName",
         "-s",
-        "segmentId"
+        "643e76bfc1d60cb6ca7832fb",
       ]);
     } catch (error) {
       expect((error as Error).message).toBe(
@@ -66,20 +66,19 @@ describe("cli", () => {
 
   it("should throw an error if create request is invalid", async () => {
     expect.assertions(2);
-    const apiKey = shortid.generate();
     const scope = nock("https://api.connectif.cloud", {
       reqheaders: {
         "Content-Type": "application/json",
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .post("/exports", {
         exportType: "contacts",
         delimiter: ",",
         dateFormat: "ISO",
         filters: {
-          segmentId: "segmentId"
-        }
+          segmentId: "notAnObjectId",
+        },
       })
       .reply(422, {
         detail: "One or more validation error occurred.",
@@ -89,9 +88,9 @@ describe("cli", () => {
           {
             name: "segmentId",
             path: "/filters/segmentId",
-            reason: "Value is not valid"
-          }
-        ]
+            reason: "Value is not valid",
+          },
+        ],
       });
 
     try {
@@ -106,7 +105,7 @@ describe("cli", () => {
         "-b",
         "bucketName",
         "-s",
-        "segmentId"
+        "notAnObjectId",
       ]);
     } catch (error) {
       expect((error as Error).message).toBe(
@@ -116,15 +115,64 @@ describe("cli", () => {
     }
   });
 
+  it("should throw an error if create request fail", async () => {
+    expect.assertions(2);
+    const scope = nock("https://api.connectif.cloud", {
+      reqheaders: {
+        "Content-Type": "application/json",
+        Authorization: `apiKey ${apiKey}`,
+      },
+    })
+      .post("/exports", {
+        exportType: "data-explorer",
+        delimiter: ",",
+        dateFormat: "ISO",
+        filters: {
+          fromDate: "2022-10-05T14:48:00.000Z",
+          toDate: "2022-10-15T14:48:00.000Z",
+          dataExplorerReportId: "643e76bfc1d60cb6ca7832fb",
+        },
+      })
+      .reply(500, {
+        detail: "Ops, unhandled error here.",
+        status: 500,
+        title: "Internal Server Error",
+      });
+
+    try {
+      await cli().parseAsync([
+        "node",
+        "index.js",
+        "export-data-explorer",
+        "-a",
+        apiKey,
+        "-k",
+        "./key.json",
+        "-b",
+        "bucketName",
+        "-f",
+        "2022-10-05T14:48:00.000Z",
+        "-t",
+        "2022-10-15T14:48:00.000Z",
+        "-r",
+        "643e76bfc1d60cb6ca7832fb",
+      ]);
+    } catch (error) {
+      expect((error as Error).message).toBe(
+        "Error response while creating export: Internal Server Error - Ops, unhandled error here."
+      );
+      expect(scope.isDone()).toBe(true);
+    }
+  });
+
   it("should throw an error if get export result fail", async () => {
     expect.assertions(3);
-    const apiKey = shortid.generate();
-    const exportId = shortid.generate();
+    const exportId = "643e7882e31c1dfdfea998eb";
     const scopeCreate = nock("https://api.connectif.cloud", {
       reqheaders: {
         "Content-Type": "application/json",
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .post("/exports", {
         exportType: "activities",
@@ -132,15 +180,15 @@ describe("cli", () => {
         dateFormat: "ISO",
         filters: {
           fromDate: "2020-05-01",
-          toDate: "2020-05-02"
-        }
+          toDate: "2020-05-02",
+        },
       })
       .reply(201, { id: exportId });
 
     const scopeGet = nock("https://api.connectif.cloud", {
       reqheaders: {
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .get(`/exports/${exportId}`)
       .once()
@@ -164,7 +212,7 @@ describe("cli", () => {
         "-f",
         "2020-05-01",
         "-t",
-        "2020-05-02"
+        "2020-05-02",
       ]);
     } catch (error) {
       expect((error as Error).message).toBe(
@@ -177,13 +225,12 @@ describe("cli", () => {
 
   it("should throw an error if get export return export status error", async () => {
     expect.assertions(3);
-    const apiKey = shortid.generate();
-    const exportId = shortid.generate();
+    const exportId = "643e7882e31c1dfdfea998eb";
     const scopeCreate = nock("https://api.connectif.cloud", {
       reqheaders: {
         "Content-Type": "application/json",
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .post("/exports", {
         exportType: "activities",
@@ -191,15 +238,15 @@ describe("cli", () => {
         dateFormat: "ISO",
         filters: {
           fromDate: "2020-05-01",
-          toDate: "2020-05-02"
-        }
+          toDate: "2020-05-02",
+        },
       })
       .reply(201, { id: exportId });
 
     const scopeGet = nock("https://api.connectif.cloud", {
       reqheaders: {
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .get(`/exports/${exportId}`)
       .once()
@@ -219,7 +266,7 @@ describe("cli", () => {
         "-f",
         "2020-05-01",
         "-t",
-        "2020-05-02"
+        "2020-05-02",
       ]);
     } catch (error) {
       expect((error as Error).message).toBe(
@@ -232,13 +279,12 @@ describe("cli", () => {
 
   it("should throw an error if download export result from url fail", async () => {
     expect.assertions(4);
-    const apiKey = shortid.generate();
-    const exportId = shortid.generate();
+    const exportId = "643e7882e31c1dfdfea998eb";
     const scopeCreate = nock("https://api.connectif.cloud", {
       reqheaders: {
         "Content-Type": "application/json",
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .post("/exports", {
         exportType: "activities",
@@ -246,15 +292,15 @@ describe("cli", () => {
         dateFormat: "ISO",
         filters: {
           fromDate: "2020-05-01",
-          toDate: "2020-05-02"
-        }
+          toDate: "2020-05-02",
+        },
       })
       .reply(201, { id: exportId });
 
     const scopeGet = nock("https://api.connectif.cloud", {
       reqheaders: {
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .get(`/exports/${exportId}`)
       .once()
@@ -262,7 +308,7 @@ describe("cli", () => {
         status: "inProgress",
         total: 0,
         progress: 0,
-        fileUrl: "https://export.com/myexportfile.zip"
+        fileUrl: "https://export.com/myexportfile.zip",
       })
       .get(`/exports/${exportId}`)
       .once()
@@ -270,7 +316,7 @@ describe("cli", () => {
         status: "inProgress",
         total: 1000,
         progress: 500,
-        fileUrl: "https://export.com/myexportfile.zip"
+        fileUrl: "https://export.com/myexportfile.zip",
       })
       .get(`/exports/${exportId}`)
       .once()
@@ -278,7 +324,7 @@ describe("cli", () => {
         status: "finished",
         total: 1000,
         progress: 1000,
-        fileUrl: "https://export.com/myexportfile.zip"
+        fileUrl: "https://export.com/myexportfile.zip",
       });
 
     const scopeDownload = nock("https://export.com")
@@ -299,7 +345,7 @@ describe("cli", () => {
         "-f",
         "2020-05-01",
         "-t",
-        "2020-05-02"
+        "2020-05-02",
       ]);
     } catch (error) {
       expect((error as Error).message).toBe(
@@ -312,30 +358,29 @@ describe("cli", () => {
   });
 
   it("should export from Connectif, then unzip and upload csv files to Google Cloud Storage", async () => {
-    const apiKey = shortid.generate();
-    const exportId = shortid.generate();
+    const exportId = "643e7882e31c1dfdfea998eb";
     const scopeCreate = nock("https://api.connectif.cloud", {
       reqheaders: {
         "Content-Type": "application/json",
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .post("/exports", {
         exportType: "activities",
         delimiter: ",",
         dateFormat: "ISO",
         filters: {
-          fromDate: "2020-05-01",
-          toDate: "2020-05-02",
-          segmentId: "segmentId"
-        }
+          fromDate: "2022-10-05T14:48:00.000Z",
+          toDate: "2022-10-15T14:48:00.000Z",
+          segmentId: "643e76bfc1d60cb6ca7832fb",
+        },
       })
       .reply(201, { id: exportId });
 
     const scopeGet = nock("https://api.connectif.cloud", {
       reqheaders: {
-        Authorization: `apiKey ${apiKey}`
-      }
+        Authorization: `apiKey ${apiKey}`,
+      },
     })
       .get(`/exports/${exportId}`)
       .once()
@@ -345,7 +390,7 @@ describe("cli", () => {
         status: "finished",
         total: 100,
         progress: 100,
-        fileUrl: "https://export.com/myexportfile.zip"
+        fileUrl: "https://export.com/myexportfile.zip",
       });
 
     const fixtureZip =
@@ -353,7 +398,7 @@ describe("cli", () => {
     const scopeDownload = nock("https://export.com")
       .get("/myexportfile.zip")
       .replyWithFile(200, __dirname + "/fixtures/" + fixtureZip, {
-        "Content-Type": "application/zip"
+        "Content-Type": "application/zip",
       });
 
     await cli().parseAsync([
@@ -367,11 +412,11 @@ describe("cli", () => {
       "-b",
       "bucketName",
       "-f",
-      "2020-05-01",
+      "2022-10-05T14:48:00.000Z",
       "-t",
-      "2020-05-02",
+      "2022-10-15T14:48:00.000Z",
       "-s",
-      "segmentId"
+      "643e76bfc1d60cb6ca7832fb",
     ]);
 
     expect(scopeCreate.isDone()).toBe(true);
@@ -384,7 +429,7 @@ describe("cli", () => {
       ),
       {
         destination:
-          "export-activities/export-activities-18615f52-43dd-4448-85ed-9107273303cc.csv"
+          "export-activities/export-activities-18615f52-43dd-4448-85ed-9107273303cc.csv",
       }
     );
     expect(uploadMock).toHaveBeenCalledWith(
@@ -393,7 +438,7 @@ describe("cli", () => {
       ),
       {
         destination:
-          "export-activities-products/export-activities-18615f52-43dd-4448-85ed-9107273303cc-products.csv"
+          "export-activities-products/export-activities-18615f52-43dd-4448-85ed-9107273303cc-products.csv",
       }
     );
   });

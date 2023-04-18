@@ -1,7 +1,7 @@
 
 import fetch from 'node-fetch';
 import cliProgress from 'cli-progress';
-import wait from './wait';
+import { setTimeout } from 'timers/promises';
 
 const connectifApiBaseUrl = 'https://api.connectif.cloud';
 
@@ -11,10 +11,11 @@ export type ConnectifApi = {
 }
 
 export type ExportRequest = {
-    exportType: 'contacts' | 'activities';
+    exportType: 'contacts' | 'activities' | 'data-explorer';
     delimiter: string;
     dateFormat: string;
     filters: {
+        dataExplorerReportId?: string;
         segmentId?: string;
         toDate?: string;
         fromDate?: string;
@@ -75,7 +76,7 @@ export default function connectifApi(apiKey: string): ConnectifApi {
             progressBar?.stop();
             throw new Error('Export has finished with error status');
         }
-        await wait(1000);
+        await setTimeout(1000);
         return getExportFileUrlAndRetryUntilIsReady(exportId, progressBar);
     }
 

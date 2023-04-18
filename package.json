@@ -28,14 +28,12 @@
     "colors": "^1.4.0",
     "commander": "^10.0.0",
     "node-fetch": "^2.6.0",
-    "shortid": "^2.2.8",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.7.0",
     "@types/jest": "^27.0.0",
     "@types/node": "^18.6.1",
-    "@types/shortid": "^0.0.29",
     "@types/unzipper": "^0.10.3",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",

@@ -44,6 +44,22 @@ function getExportOptionsFromCmdObj(cmdObj): ExportOptions {
     };
 }
 
+async function exportActivities(cmdObj): Promise<void> {
+    const { toDate, fromDate, segmentId } = cmdObj;
+    const exportRequest: ExportRequest = {
+        exportType: 'activities',
+        delimiter: ',',
+        dateFormat: 'ISO',
+        filters: {
+            toDate,
+            fromDate,
+            segmentId
+        }
+    };
+    const options = getExportOptionsFromCmdObj(cmdObj);
+    await executeExport(options, exportRequest);
+}
+
 async function exportContacts(cmdObj): Promise<void> {
     const { segmentId } = cmdObj;
     const exportRequest: ExportRequest = {
@@ -58,16 +74,16 @@ async function exportContacts(cmdObj): Promise<void> {
     await executeExport(options, exportRequest);
 }
 
-async function exportActivities(cmdObj): Promise<void> {
-    const { toDate, fromDate, segmentId } = cmdObj;
+async function exportDataExplorerReport(cmdObj): Promise<void> {
+    const { dataExplorerReportId, toDate, fromDate } = cmdObj;
     const exportRequest: ExportRequest = {
-        exportType: 'activities',
+        exportType: 'data-explorer',
         delimiter: ',',
         dateFormat: 'ISO',
         filters: {
-            toDate,
+            dataExplorerReportId,
             fromDate,
-            segmentId
+            toDate
         }
     };
     const options = getExportOptionsFromCmdObj(cmdObj);
@@ -101,6 +117,17 @@ export default function cli(): commander.Command {
         .option('-s, --segmentId <segmentId>', 'filter the export by contacts in a given segment.')
         .description('export contacts.')
         .action(exportContacts);
+
+    program
+        .command('export-data-explorer')
+        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
+        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
+        .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
+        .requiredOption('-r, --dataExplorerReportId <dataExplorerReportId>', 'data explorer report identifier to export (required).')
+        .requiredOption('-f, --fromDate <fromDate>', 'filter after a given date (required).')
+        .requiredOption('-t, --toDate <toDate>', 'filter before a given date (required).')
+        .description('export data explorer reports.')
+        .action(exportDataExplorerReport);
 
     return program;
 }

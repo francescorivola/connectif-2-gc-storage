@@ -4,10 +4,10 @@ import unzipper from 'unzipper';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
 import stream from 'stream';
-import shortid from 'shortid';
+import { randomUUID } from 'crypto';
 
 const streamPipeline = promisify(stream.pipeline);
-const tmpDir = `./tmp-${shortid.generate()}`;
+const tmpDir = `./tmp-${randomUUID()}`;
 
 export function getTmpDirFilePathSync(file: string): string {
     return path.join(tmpDir, file);
@@ -51,7 +51,7 @@ export async function downloadFromUrlToTmpDir(uri: string): Promise<string> {
         throw new Error(`Error response while downloading export ${uri}: ${response.statusText}`);
     }
     createTmpDir();
-    const zipFilePath = getTmpDirFilePathSync(`export-${shortid.generate()}.zip`);
+    const zipFilePath = getTmpDirFilePathSync(`export-${randomUUID()}.zip`);
     await streamPipeline(response.body, fs.createWriteStream(zipFilePath));
     return zipFilePath;
 }
