@@ -15,7 +15,7 @@ export type ExportRequest = {
     delimiter: string;
     dateFormat: string;
     filters: {
-        dataExplorerReportId?: string;
+        reportId?: string;
         segmentId?: string;
         toDate?: string;
         fromDate?: string;
@@ -35,9 +35,11 @@ export default function connectifApi(apiKey: string): ConnectifApi {
     }
 
     async function createExport(exportRequest: ExportRequest): Promise<string> {
-        const response = await fetch(`${connectifApiBaseUrl}/exports`, {
+        const url = getCreateExportRequestUrl(exportRequest);
+        const body = getCreateExportRequestBody(exportRequest);
+        const response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify(exportRequest),
+            body: JSON.stringify(body),
             headers: {
                 'Authorization': `apiKey ${apiKey}`,
                 'Content-Type': 'application/json'
@@ -48,6 +50,21 @@ export default function connectifApi(apiKey: string): ConnectifApi {
         }
         const { id } = await response.json();
         return id;
+    }
+
+    function getCreateExportRequestUrl(exportRequest: ExportRequest): string {
+        return exportRequest.exportType !== 'data-explorer' ? 
+        `${connectifApiBaseUrl}/exports` :
+        `${connectifApiBaseUrl}/exports/type/data-explorer`
+    }
+
+    function getCreateExportRequestBody(exportRequest: ExportRequest) {
+        return exportRequest.exportType !== 'data-explorer' ?
+            exportRequest : 
+            {
+                delimiter: exportRequest.delimiter,
+                filters: exportRequest.filters
+            };
     }
 
     async function getExportFileUrlAndRetryUntilIsReady(exportId: string, progressBar?: cliProgress.SingleBar): Promise<string> {

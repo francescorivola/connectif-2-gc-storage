@@ -75,13 +75,13 @@ async function exportContacts(cmdObj): Promise<void> {
 }
 
 async function exportDataExplorerReport(cmdObj): Promise<void> {
-    const { dataExplorerReportId, toDate, fromDate } = cmdObj;
+    const { reportId, toDate, fromDate } = cmdObj;
     const exportRequest: ExportRequest = {
         exportType: 'data-explorer',
         delimiter: ',',
         dateFormat: 'ISO',
         filters: {
-            dataExplorerReportId,
+            reportId,
             fromDate,
             toDate
         }
@@ -123,7 +123,7 @@ export default function cli(): commander.Command {
         .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
         .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
         .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
-        .requiredOption('-r, --dataExplorerReportId <dataExplorerReportId>', 'data explorer report identifier to export (required).')
+        .requiredOption('-r, --reportId <reportId>', 'data explorer report identifier to export (required).')
         .requiredOption('-f, --fromDate <fromDate>', 'filter after a given date (required).')
         .requiredOption('-t, --toDate <toDate>', 'filter before a given date (required).')
         .description('export data explorer reports.')

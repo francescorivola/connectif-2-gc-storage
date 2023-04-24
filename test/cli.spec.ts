@@ -123,14 +123,12 @@ describe("cli", () => {
         Authorization: `apiKey ${apiKey}`,
       },
     })
-      .post("/exports", {
-        exportType: "data-explorer",
+      .post("/exports/type/data-explorer", {
         delimiter: ",",
-        dateFormat: "ISO",
         filters: {
-          fromDate: "2022-10-05T14:48:00.000Z",
-          toDate: "2022-10-15T14:48:00.000Z",
-          dataExplorerReportId: "643e76bfc1d60cb6ca7832fb",
+          fromDate: "2022-10-05",
+          toDate: "2022-10-15",
+          reportId: "643e76bfc1d60cb6ca7832fb",
         },
       })
       .reply(500, {
@@ -151,9 +149,9 @@ describe("cli", () => {
         "-b",
         "bucketName",
         "-f",
-        "2022-10-05T14:48:00.000Z",
+        "2022-10-05",
         "-t",
-        "2022-10-15T14:48:00.000Z",
+        "2022-10-15",
         "-r",
         "643e76bfc1d60cb6ca7832fb",
       ]);
