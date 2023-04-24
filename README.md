@@ -112,8 +112,8 @@ $ connectif-2-gc-storage export-activities \
   --gcKeyFileName ./key.json \
   --gcBucketName $BUCKET_NAME \
   --connectifApiKey $CONNECTIF_API_KEY \
-  --fromDate 2020-03-01 \
-  --toDate 2020-04-01
+  --fromDate 2020-02-28T23:00:00.000Z \
+  --toDate 2020-03-31T22:00:00.000Z
 ```
 
 ![cli-run](./doc/images/cli-run.png)
@@ -149,8 +149,8 @@ $ connectif-2-gc-storage export-activities \
   --gcKeyFileName ./key.json \
   --gcBucketName $BUCKET_NAME \
   --connectifApiKey $CONNECTIF_API_KEY \
-  --fromDate 2020-04-01 \
-  --toDate 2020-05-01
+  --fromDate 2020-03-31T22:00:00.000Z \
+  --toDate 2020-04-30T22:00:00.000Z
 ```
 
 ![cli-run-2](./doc/images/cli-run-2.png)
