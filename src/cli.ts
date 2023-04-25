@@ -9,6 +9,7 @@ type ExportOptions = {
     connectifApiKey: string;
     gcKeyFileName: string;
     gcBucketName: string;
+    gcFolderName?: string;
 };
 
 async function executeExport(options: ExportOptions, exportRequest: ExportRequest): Promise<void> {
@@ -22,7 +23,8 @@ async function executeExport(options: ExportOptions, exportRequest: ExportReques
             uploadFiles: uploadFilesToGoogleCloudStorage
         } = googleCloudStorage({
             gcKeyFileName: options.gcKeyFileName,
-            gcBucketName: options.gcBucketName
+            gcBucketName: options.gcBucketName,
+            gcFolderName: options.gcFolderName
         });
 
         await createConnectifExport(exportRequest)
@@ -36,11 +38,12 @@ async function executeExport(options: ExportOptions, exportRequest: ExportReques
 }
 
 function getExportOptionsFromCmdObj(cmdObj): ExportOptions {
-    const { connectifApiKey, gcKeyFileName, gcBucketName } = cmdObj;
+    const { connectifApiKey, gcKeyFileName, gcBucketName, gcFolderName } = cmdObj;
     return {
         connectifApiKey,
         gcBucketName,
-        gcKeyFileName
+        gcKeyFileName,
+        gcFolderName
     };
 }
 
@@ -100,8 +103,8 @@ export default function cli(): commander.Command {
 
     program
         .command('export-activities')
-        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
-        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
+        .requiredOption('-k, --gcKeyFileName <gcKeyFileName>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
+        .requiredOption('-b, --gcBucketName <gcBucketName>', 'Google Cloud Storage bucket name (required).')
         .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
         .requiredOption('-f, --fromDate <fromDate>', 'filter activities export created after a given date (required).')
         .requiredOption('-t, --toDate <toDate>', 'filter activities export created before a given date (required).')
@@ -111,8 +114,8 @@ export default function cli(): commander.Command {
 
     program
         .command('export-contacts')
-        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
-        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
+        .requiredOption('-k, --gcKeyFileName <gcKeyFileName>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
+        .requiredOption('-b, --gcBucketName <gcBucketName>', 'Google Cloud Storage bucket name (required).')
         .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
         .option('-s, --segmentId <segmentId>', 'filter the export by contacts in a given segment.')
         .description('export contacts.')
@@ -120,12 +123,13 @@ export default function cli(): commander.Command {
 
     program
         .command('export-data-explorer')
-        .requiredOption('-k, --gcKeyFileName <path>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
-        .requiredOption('-b, --gcBucketName <name>', 'Google Cloud Storage bucket name (required).')
+        .requiredOption('-k, --gcKeyFileName <gcKeyFileName>', 'Path to a .json, .pem, or .p12 Google Cloud key file (required).')
+        .requiredOption('-b, --gcBucketName <gcBucketName>', 'Google Cloud Storage bucket name (required).')
         .requiredOption('-a, --connectifApiKey <apiKey>', 'Connectif Api Key. export:read and export:write scopes are required (required).')
         .requiredOption('-r, --reportId <reportId>', 'data explorer report identifier to export (required).')
         .requiredOption('-f, --fromDate <fromDate>', 'filter after a given date (required).')
         .requiredOption('-t, --toDate <toDate>', 'filter before a given date (required).')
+        .requiredOption('-d, --gcFolderName <gcFolderName>', 'the folder to store the report file in Google Cloud Storage (required).')
         .description('export data explorer reports.')
         .action(exportDataExplorerReport);
 

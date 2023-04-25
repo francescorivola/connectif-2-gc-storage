@@ -3,6 +3,7 @@ import { Storage } from '@google-cloud/storage';
 export type GoogleCloudStorageOptions = {
     gcKeyFileName: string;
     gcBucketName: string;
+    gcFolderName?: string;
 }
 
 export type GoogleCloudStorage = {
@@ -19,9 +20,15 @@ export default function googleCloudStorage(options: GoogleCloudStorageOptions): 
         return `${fileNamePart.replace(uuidRegExp, '')}/${fileName}`;
     }
 
+    function getDestination(fileName: string): string {
+        return options.gcFolderName ?
+            `${options.gcFolderName}/${fileName}` :
+            getDestinationFromFileName(fileName);
+    }
+
     async function uploadFile(fileName: string, filePath: string): Promise<void> {
         console.log(`uploading file ${fileName} ... 📤`);
-        const destination = getDestinationFromFileName(fileName);
+        const destination = getDestination(fileName);
         await storage.bucket(options.gcBucketName).upload(filePath, { destination });
         console.log(`file ${fileName} uploaded 📤`.green);
     }

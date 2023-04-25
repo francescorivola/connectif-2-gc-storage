@@ -154,6 +154,8 @@ describe("cli", () => {
         "2022-10-15",
         "-r",
         "643e76bfc1d60cb6ca7832fb",
+        "-d",
+        "report-purchases",
       ]);
     } catch (error) {
       expect((error as Error).message).toBe(
@@ -355,7 +357,7 @@ describe("cli", () => {
     }
   });
 
-  it("should export from Connectif, then unzip and upload csv files to Google Cloud Storage", async () => {
+  it("should export activities from Connectif, then unzip and upload csv files to Google Cloud Storage", async () => {
     const exportId = "643e7882e31c1dfdfea998eb";
     const scopeCreate = nock("https://api.connectif.cloud", {
       reqheaders: {
@@ -437,6 +439,83 @@ describe("cli", () => {
       {
         destination:
           "export-activities-products/export-activities-18615f52-43dd-4448-85ed-9107273303cc-products.csv",
+      }
+    );
+  });
+
+  it("should export data explorer report from Connectif, then unzip and upload csv files to Google Cloud Storage", async () => {
+    const exportId = "643e7882e31c1dfdfea998eb";
+    const scopeCreate = nock("https://api.connectif.cloud", {
+      reqheaders: {
+        "Content-Type": "application/json",
+        Authorization: `apiKey ${apiKey}`,
+      },
+    })
+      .post("/exports/type/data-explorer", {
+        delimiter: ",",
+        filters: {
+          fromDate: "2022-10-05",
+          toDate: "2022-10-15",
+          reportId: "643e76bfc1d60cb6ca7832fb",
+        },
+      })
+      .reply(201, { id: exportId });
+
+    const scopeGet = nock("https://api.connectif.cloud", {
+      reqheaders: {
+        Authorization: `apiKey ${apiKey}`,
+      },
+    })
+      .get(`/exports/${exportId}`)
+      .once()
+      .reply(200, { status: "inProgress" })
+      .get(`/exports/${exportId}`)
+      .reply(200, {
+        status: "finished",
+        total: 100,
+        progress: 100,
+        fileUrl: "https://export.com/myexportfile.zip",
+      });
+
+    const fixtureZip =
+      "purchases-20230326-20230425-d5d018fc-9140-4b65-bcac-84d5d6a8413b.zip";
+    const scopeDownload = nock("https://export.com")
+      .get("/myexportfile.zip")
+      .replyWithFile(200, __dirname + "/fixtures/" + fixtureZip, {
+        "Content-Type": "application/zip",
+      });
+
+    await cli().parseAsync([
+      "node",
+      "index.js",
+      "export-data-explorer",
+      "-a",
+      apiKey,
+      "-k",
+      "./key.json",
+      "-b",
+      "bucketName",
+      "-f",
+      "2022-10-05",
+      "-t",
+      "2022-10-15",
+      "-r",
+      "643e76bfc1d60cb6ca7832fb",
+      "-d",
+      "report-my-purchases",
+    ]);
+
+    expect(scopeCreate.isDone()).toBe(true);
+    expect(scopeGet.isDone()).toBe(true);
+    expect(scopeDownload.isDone()).toBe(true);
+    expect(bucketMock).toHaveBeenNthCalledWith(1, "bucketName");
+    expect(uploadMock).toHaveBeenCalledWith(
+      getTmpDirFilePathSync(
+        "Purchases-20230326-20230425-d5d018fc-9140-4b65-bcac-84d5d6a8413b.csv"
+      ),
+      {
+        destination:
+          "report-my-purchases/Purchases-20230326-20230425-d5d018fc-9140-4b65-bcac-84d5d6a8413b.csv",
       }
     );
   });
