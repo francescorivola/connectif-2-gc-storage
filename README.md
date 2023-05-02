@@ -2,7 +2,6 @@
 
 # connectif-2-gc-storage
 
-
 [![Npm Version](https://badge.fury.io/js/connectif-2-gc-storage.svg)](https://www.npmjs.com/package/connectif-2-gc-storage)
 [![Actions Status](https://github.com/francescorivola/connectif-2-gc-storage/workflows/Node%20CI/badge.svg)](https://github.com/francescorivola/connectif-2-gc-storage/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage/badge)](https://www.codefactor.io/repository/github/francescorivola/connectif-2-gc-storage)
@@ -45,13 +44,14 @@ Usage: connectif-2-gc-storage [options] [command]
 CLI to automate Connectif data export uploading to Google Cloud Storage
 
 Options:
-  -V, --version                output the version number
-  -h, --help                   display help for command
+  -V, --version                   output the version number
+  -h, --help                      display help for command
 
 Commands:
-  export-activities [options]  export contacts activities.
-  export-contacts [options]    export contacts.
-  help [command]               display help for command
+  export-activities [options]     export contacts activities.
+  export-contacts [options]       export contacts.
+  export-data-explorer [options]  export data explorer reports.
+  help [command]                  display help for command
 ```
 
 To get documentation of each command use help. i.e.:
@@ -82,11 +82,13 @@ Options:
 In case you want to run the CLI using docker you can with the following commands:
 
 The below will print the version of the CLI:
+
 ```
 docker run --rm francescorivola/connectif-2-gc-storage:latest
 ```
 
 The below will run the CLI with the given options:
+
 ```
 docker run --rm -v $(pwd)/key.json:/home/node/key.json francescorivola/connectif-2-gc-storage:latest \
   export-activities \
@@ -110,8 +112,8 @@ $ connectif-2-gc-storage export-activities \
   --gcKeyFileName ./key.json \
   --gcBucketName $BUCKET_NAME \
   --connectifApiKey $CONNECTIF_API_KEY \
-  --fromDate 2020-03-01 \
-  --toDate 2020-04-01
+  --fromDate 2020-02-28T23:00:00.000Z \
+  --toDate 2020-03-31T22:00:00.000Z
 ```
 
 ![cli-run](./doc/images/cli-run.png)
@@ -126,7 +128,7 @@ First of all we add a new Google Cloud Storage **Data Source**.
 
 ![data-studio-add-connector](./doc/images/data-studio-add-connector.png)
 
-Then we configure the connector checking the checkbox **Use all files in path** and we add the path composed by **BUCKET_NAME/export-activities**. Finally we click in the **Connect** button. 
+Then we configure the connector checking the checkbox **Use all files in path** and we add the path composed by **BUCKET_NAME/export-activities**. Finally we click in the **Connect** button.
 
 ![data-studio-gc-storage-connector](./doc/images/data-studio-gc-storage-connector.png)
 
@@ -147,9 +149,10 @@ $ connectif-2-gc-storage export-activities \
   --gcKeyFileName ./key.json \
   --gcBucketName $BUCKET_NAME \
   --connectifApiKey $CONNECTIF_API_KEY \
-  --fromDate 2020-04-01 \
-  --toDate 2020-05-01
+  --fromDate 2020-03-31T22:00:00.000Z \
+  --toDate 2020-04-30T22:00:00.000Z
 ```
+
 ![cli-run-2](./doc/images/cli-run-2.png)
 
 If we check the Google Cloud Storage Browser we will see 2 csv files under our export-activities folder, the previous one and the new one imported.
@@ -165,4 +168,3 @@ Happy Data Analysis!!
 ## License
 
 MIT
-
