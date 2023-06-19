@@ -19,6 +19,7 @@ export type ExportRequest = {
         segmentId?: string;
         toDate?: string;
         fromDate?: string;
+        activityTypes?: string[];
     };
 }
 

@@ -48,7 +48,7 @@ function getExportOptionsFromCmdObj(cmdObj): ExportOptions {
 }
 
 async function exportActivities(cmdObj): Promise<void> {
-    const { toDate, fromDate, segmentId } = cmdObj;
+    const { toDate, fromDate, segmentId, activityTypes } = cmdObj;
     const exportRequest: ExportRequest = {
         exportType: 'activities',
         delimiter: ',',
@@ -56,7 +56,10 @@ async function exportActivities(cmdObj): Promise<void> {
         filters: {
             toDate,
             fromDate,
-            segmentId
+            segmentId,
+            ...(activityTypes ? {
+                activityType: activityTypes.split(',')
+            } : {})
         }
     };
     const options = getExportOptionsFromCmdObj(cmdObj);
@@ -109,6 +112,7 @@ export default function cli(): commander.Command {
         .requiredOption('-f, --fromDate <fromDate>', 'filter activities export created after a given date (required).')
         .requiredOption('-t, --toDate <toDate>', 'filter activities export created before a given date (required).')
         .option('-s, --segmentId <segmentId>', 'filter the activities export of contacts in a given segment.')
+        .option('-y, --activityTypes <activityTypes>', 'filter the activities export by activity types separated by comma (i.e.: purchase,login,register).')
         .description('export contacts activities.')
         .action(exportActivities);
 

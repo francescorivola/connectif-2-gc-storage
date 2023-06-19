@@ -68,13 +68,14 @@ Usage: connectif-2-gc-storage export-activities [options]
 export contacts activities.
 
 Options:
-  -k, --gcKeyFileName <path>      Path to a .json, .pem, or .p12 Google Cloud key file (required).
-  -b, --gcBucketName <name>       Google Cloud Storage bucket name (required).
-  -a, --connectifApiKey <apiKey>  Connectif Api Key. export:read and export:write scopes are required (required).
-  -f, --fromDate <fromDate>       filter activities export created after a given date (required).
-  -t, --toDate <toDate>           filter activities export created before a given date (required).
-  -s, --segmentId <segmentId>     filter the activities export of contacts in a given segment.
-  -h, --help                      display help for command
+  -k, --gcKeyFileName <path>            Path to a .json, .pem, or .p12 Google Cloud key file (required).
+  -b, --gcBucketName <name>             Google Cloud Storage bucket name (required).
+  -a, --connectifApiKey <apiKey>        Connectif Api Key. export:read and export:write scopes are required (required).
+  -f, --fromDate <fromDate>             filter activities export created after a given date (required).
+  -t, --toDate <toDate>                 filter activities export created before a given date (required).
+  -s, --segmentId <segmentId>           filter the activities export of contacts in a given segment.
+  -y, --activityTypes <activityTypes>   filter the activities export by activity types separated by comma (i.e.: purchase,login,register).
+  -h, --help                            display help for command
 ```
 
 ## Docker
