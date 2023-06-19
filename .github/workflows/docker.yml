@@ -5,7 +5,6 @@ on: workflow_dispatch
 jobs:
 
   publish-docker-hub:
-    needs: publish-npm
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
