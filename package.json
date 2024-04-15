@@ -28,7 +28,7 @@
     "colors": "^1.4.0",
     "commander": "^12.0.0",
     "node-fetch": "^2.6.0",
-    "unzipper": "^0.10.11"
+    "unzipper": "^0.11.2"
   },
   "devDependencies": {
     "@types/cli-progress": "^3.7.0",
